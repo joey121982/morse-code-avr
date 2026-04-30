@@ -63,10 +63,6 @@ void main(void) {
     setup();
 
     while (1) {
-        uint8_t transmit_mode_sw = TRANSMIT_MODE_SW;
-        uint8_t input_char_btn = INPUT_CHAR_BTN;
-        uint8_t input_del_btn = INPUT_DEL_BTN;
-
         if(input_char_pressed()) {
             *transmit_buf_ptr = PIND;
             transmit_buf_ptr++;

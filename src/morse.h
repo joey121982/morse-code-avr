@@ -1,6 +1,6 @@
 #pragma once
 
-#define NULL 0
+#define NULL (void*)0
 
 const char* ascii_to_morse(const char c) {
     // we return a flash-saved char 
