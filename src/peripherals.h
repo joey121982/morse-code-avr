@@ -12,3 +12,7 @@
 #define DOT_TRANSMIT_PIN 0
 #define LINE_TRANSMIT_PIN 1
 #define TRANSMIT_STATUS_PIN 2
+
+uint8_t transmit_mode_toggled();
+uint8_t input_char_pressed();
+uint8_t input_del_pressed();

@@ -34,7 +34,7 @@ ISR(TIMER1_COMPA_vect) {    // 100ms
 
         ctr = 0;
         current_signal_ptr++;
-        if(current_signal_ptr != '\0') {
+        if(*current_signal_ptr != '\0') {
             transmission_state = SIGNAL_BREAK;
         } else if(*(transmit_buf_ptr++)){
             transmission_state = CHAR_BREAK;
@@ -48,7 +48,7 @@ ISR(TIMER1_COMPA_vect) {    // 100ms
         if(ctr == 2) {
             ctr = 0;
             current_signal_ptr++;
-            if(current_signal_ptr != '\0') {
+            if(*current_signal_ptr != '\0') {
                 transmission_state = SIGNAL_BREAK;
             } else {
                 transmit_buf_ptr++;
@@ -62,32 +62,23 @@ ISR(TIMER1_COMPA_vect) {    // 100ms
 void main(void) {
     setup();
 
-    // previous states, used for rising edge detection
-    uint8_t prev_transmit_mode_sw = 0;
-    uint8_t prev_input_char_btn = 0;
-    uint8_t prev_input_del_btn = 0;
-
     while (1) {
         uint8_t transmit_mode_sw = TRANSMIT_MODE_SW;
         uint8_t input_char_btn = INPUT_CHAR_BTN;
         uint8_t input_del_btn = INPUT_DEL_BTN;
 
-        if(input_char_btn && !prev_input_char_btn) {
+        if(input_char_pressed()) {
             *transmit_buf_ptr = PIND;
             transmit_buf_ptr++;
         }
 
-        if(input_del_btn && !prev_input_del_btn) {
+        if(input_del_pressed()) {
             // no deletion on empty buffer
             if(transmit_buf_ptr > transmit_buf) transmit_buf_ptr--;
         }
 
-        if(transmit_mode_sw && !prev_transmit_mode_sw) {
+        if(transmit_mode_toggled()) {
             transmit_buf_ptr = 0;
         }
-
-        prev_transmit_mode_sw = transmit_mode_sw;
-        prev_input_char_btn = input_char_btn;
-        prev_input_del_btn = input_del_btn;
     }
 }

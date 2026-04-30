@@ -2,7 +2,7 @@
 
 #define NULL 0
 
-const flash char* ascii_to_morse(const char c) {
+const char* ascii_to_morse(const char c) {
     // we return a flash-saved char 
     // sequence describing the morse signal
     // depending on the given character
