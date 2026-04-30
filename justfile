@@ -7,3 +7,5 @@ build:
 
 clean:
     rm -rf *.o *.elf *.hex *.bin
+
+test: build clean 

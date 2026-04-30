@@ -3,7 +3,11 @@
 
 #include "peripherals.h"
 
-void timer1_init() {
+static void timer0_init() {    // 20ms
+    // TODO... 
+}
+
+static void timer1_init() {    // 100ms
     TCCR1A = 0;
     TCCR1B = 0;
     TCCR1B |= (1 << WGM12);
@@ -15,9 +19,11 @@ void timer1_init() {
 }
 
 void setup() {
-    DDRA = 0;   // Port A as state control input
-    DDRB = ~0;  // Port B as communication output (all pins output)
-    DDRC = 0;   // Port C as communication input 
+    DDRA = 0;   // state control inputs
+    DDRB = ~0;  // transmission output (all pins output)
+    DDRC = 0;   // receive input
+    DDRD = 0;   // character input for transmission buffer 
 
+    timer0_init();
     timer1_init();
 }

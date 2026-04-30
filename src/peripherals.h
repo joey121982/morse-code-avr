@@ -2,11 +2,13 @@
 
 #include <avr/io.h>
 
-#define COMM_SW (PINA & (1 << 0))
+#define TRANSMIT_MODE_SW (PINA & (1 << 0))  // returns state of transmit switch
+#define INPUT_CHAR_BTN (PINA & (1 << 1))    // returns state of input button
+#define INPUT_DEL_BTN (PINA & (1 << 2))     // returns state of delete button
 
-#define C_R_DOT 0
-#define C_R_LINE 1
+#define DOT_RECEIVE_PIN 0
+#define LINE_RECEIVE_PIN 1
 
-#define B_W_DOT 0
-#define B_W_LINE 1
-#define B_STATUS_PIN 2
+#define DOT_TRANSMIT_PIN 0
+#define LINE_TRANSMIT_PIN 1
+#define TRANSMIT_STATUS_PIN 2
