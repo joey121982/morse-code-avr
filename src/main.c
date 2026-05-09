@@ -28,7 +28,7 @@ void main(void) {
         }
 
         if(transmit_mode_toggled()) {
-            transmit_buf_ptr = 0;
+            transmit_buf_ptr = transmit_buf;
         }
     }
 }
