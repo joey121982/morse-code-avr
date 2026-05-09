@@ -7,6 +7,7 @@
 
 extern char transmit_buf[128];
 extern char* transmit_buf_ptr;
+extern uint8_t sos_state;
 
 static enum {
     IDLE,
@@ -23,6 +24,29 @@ ISR(TIMER1_COMPA_vect) {    // 100ms period
     static const char* current_signal_ptr = NULL;
 
     if(!TRANSMIT_MODE_SW) return;
+
+    if (sos_state) {
+        static uint8_t sos_ticks = 0;
+
+        if (sos_ticks == 0) {
+            PORTB |= (1 << SOS_PIN);
+            PORTB &= ~((1 << LINE_TRANSMIT_PIN) | (1 << DOT_TRANSMIT_PIN));
+        }
+
+        sos_ticks++;
+
+        if (sos_ticks % 5 == 0) {
+            PORTB ^= (1 << SOS_PIN);
+        }
+
+        if (sos_ticks >= 100) {
+            sos_ticks = 0;
+            sos_state = 0;
+            PORTB &= ~(1 << SOS_PIN);
+        }
+
+        return;
+    }
 
     switch (transmission_state) {
     case IDLE:
@@ -85,7 +109,7 @@ ISR(TIMER1_COMPA_vect) {    // 100ms period
                 transmission_state = SIGNAL_BREAK;
             }
         }
-
+        break;
     case SIGNAL_BREAK:
         if(ctr < 1) {
             PORTB &= ~((1 << LINE_TRANSMIT_PIN) | (1 << DOT_TRANSMIT_PIN));

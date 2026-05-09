@@ -6,6 +6,8 @@
 #include "peripherals.h"
 #include "morse.h"
 
+uint8_t sos_state = 0;
+
 char transmit_buf[128];                  // transmission buffer
 char* transmit_buf_ptr = transmit_buf;   // current position in buffer
 

@@ -6,6 +6,7 @@
 #include "morse.h"
 
 extern char receive_buf[128];
+extern uint8_t sos_state;
 
 ISR(TIMER0_COMPA_vect) {
     static uint8_t ctr = 0;
@@ -61,6 +62,23 @@ ISR(TIMER0_COMPA_vect) {
                         receive_buf_ptr = receive_buf;
                     }
                     word_in_progress = 0;
+
+                    // SOS check
+                    uint8_t curr_idx = receive_buf_ptr - receive_buf;
+                    char c4 = receive_buf[(curr_idx + 128 - 1) & 127]; // Ending space
+                    char c3 = receive_buf[(curr_idx + 128 - 2) & 127]; // 's'
+                    char c2 = receive_buf[(curr_idx + 128 - 3) & 127]; // 'o'
+                    char c1 = receive_buf[(curr_idx + 128 - 4) & 127]; // 's'
+                    char c0 = receive_buf[(curr_idx + 128 - 5) & 127]; // Preceding space or initial '\0'
+
+                    if (c4 == ' ' && 
+                        (c3 == 's' || c3 == 'S') && 
+                        (c2 == 'o' || c2 == 'O') && 
+                        (c1 == 's' || c1 == 'S') && 
+                        (c0 == ' ' || c0 == '\0')) {
+                        
+                        sos_state = 1;
+                    }
                 }
             }
         }
