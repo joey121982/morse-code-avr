@@ -9,6 +9,8 @@
 char transmit_buf[128];                  // transmission buffer
 char* transmit_buf_ptr = transmit_buf;   // current position in buffer
 
+char* receive_buf[128];                  // receive buffer, used only in timer0
+
 void main(void) {
     setup();
 
